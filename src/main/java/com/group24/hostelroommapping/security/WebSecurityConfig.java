@@ -27,7 +27,7 @@ import com.group24.hostelroommapping.services.UserDetailsServiceImpl;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
-
+//bdfgbsxdb
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
 
