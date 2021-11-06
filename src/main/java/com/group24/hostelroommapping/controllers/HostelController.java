@@ -1,6 +1,7 @@
 package com.group24.hostelroommapping.controllers;
 
 
+import com.group24.hostelroommapping.exception.ResourceNotFoundException;
 import com.group24.hostelroommapping.models.Hostel;
 import com.group24.hostelroommapping.repository.HostelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/")
 public class HostelController {
@@ -27,13 +28,16 @@ public class HostelController {
 
     @GetMapping("hostels/{id}")
     public ResponseEntity<Hostel> getHostelById(@PathVariable Long id){
-        Hostel hostel = hostelRepository. findById(id).orElseThrow();
+        Hostel hostel = hostelRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Hostel not exist with id :" + id));
         return ResponseEntity.ok(hostel);
     }
 
     @PutMapping("/hostels/{id}")
     public ResponseEntity<Hostel> updateHostel(@PathVariable Long id, @RequestBody Hostel hostelDetails){
-        Hostel hostel = hostelRepository.findById(id).orElseThrow();
+
+        Hostel hostel = hostelRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Hostel not exist with id :" + id));
         hostel.setName(hostelDetails.getName());
         hostel.setEmail(hostelDetails.getEmail());
         hostel.setPhoneNo(hostelDetails.getPhoneNo());
@@ -46,7 +50,8 @@ public class HostelController {
 
     @DeleteMapping("/hostels/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteHostel(@PathVariable Long id){
-        Hostel hostel = hostelRepository.findById(id).orElseThrow();
+        Hostel hostel = hostelRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Hostel not exist with id :" + id));
         hostelRepository.delete(hostel);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
